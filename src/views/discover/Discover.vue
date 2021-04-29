@@ -1,14 +1,24 @@
 <template>
   <div>
+    <!-- 顶部导航栏 -->
     <top-nav-bar></top-nav-bar>
+    <!-- 轮播图 -->
     <banner-swiper
       class="swiper"
       :banner='banner'
     ></banner-swiper>
+    <!-- 发现页面圆形按钮列表 -->
     <discover-list :ball-data="ball"></discover-list>
+    <!-- 推荐歌单 -->
     <personalized></personalized>
     <div class="rail"></div>
+    <!-- 随机歌曲列表 -->
     <random-songs></random-songs>
+    <div class="rail"></div>
+    <!-- 用户雷达歌单 -->
+    <radar></radar>
+    <div class="rail"></div>
+    <music-calendar></music-calendar>
     <h2 @click="test">Discover</h2>
   </div>
 </template>
@@ -19,6 +29,8 @@ import TopNavBar from "./children/TopNavBar";
 import Personalized from "./children/Personalized";
 import DiscoverList from "./children/DiscoverList";
 import RandomSongs from "./children/RandomSongs";
+import Radar from "./children/Radar";
+import MusicCalendar from "./children/MusicCalendar";
 
 // 绝对公共组件
 import BannerSwiper from "components/content/bannerSwiper/BannerSwiper";
@@ -40,6 +52,8 @@ export default {
     DiscoverList,
     Personalized,
     RandomSongs,
+    Radar,
+    MusicCalendar,
   },
   mounted() {
     getDiscover().then((discoverData) => {

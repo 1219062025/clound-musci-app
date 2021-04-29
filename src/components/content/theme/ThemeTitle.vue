@@ -23,7 +23,7 @@ export default {
     },
     btn: {
       type: String,
-      default: "更多 ",
+      default: "更多 ",
     },
   },
 };
@@ -37,7 +37,14 @@ export default {
   padding: 0 15px;
 }
 .title {
+  width: 300px;
   font-size: 18px;
   font-weight: bold;
+  /* 先强制一行内显示文本，默认值normal会自动换行 */
+  white-space: nowrap;
+  /* 超出的部分隐藏 */
+  overflow: hidden;
+  /* 文字用省略号替代超出的部分 */
+  text-overflow: ellipsis;
 }
 </style>

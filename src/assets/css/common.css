@@ -49,7 +49,7 @@ a{
 .clear-fix {
   zoom: 1;
 }
-
+/* 导入字体图标 */
 @font-face {
   font-family: 'icomoon';
   src:  url('~assets/fonts/icomoon.eot?biwvrm');
@@ -82,6 +82,7 @@ a{
   width: 90%;
   margin: 20px auto;
 }
+/* 模块之间的分隔横块 */
 .rail {
   margin: 15px 0;
   height: 10px;

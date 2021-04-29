@@ -19,9 +19,20 @@
         >
           <img :src="item2.img">
           <div class="info">
-            <p class="title">{{item2.name}}</p>
-            <p class="flag">{{item2.flag}}</p>
+            <div class="title">
+              <span>{{item2.name}}</span>
+              <span class="artist-name">- {{artistName(item2.artist)}}</span>
+            </div>
+            <p
+              class="flag"
+              :class="{'flag-tab': item2.flagType === 'songRcmdTag'}"
+            >{{item2.flag}}</p>
+            <!-- <div v-if="item2.flag" class="flag">
+              <span v-if="item2.flagType === 'songRcmdTag'" class="tab"></span>
+              <span v-if="item2.flagType === 'songRcmdFromComment'" class="comment">SQ</span>
+            </div> -->
           </div>
+
         </div>
       </swiper-slide>
     </swiper>
@@ -49,6 +60,11 @@ export default {
     swiper,
     swiperSlide,
   },
+  computed: {
+    artistName() {
+      return (names) => names.join("/");
+    },
+  },
   mounted() {
     getDiscover().then((discoverData) => {
       const dataMode = discoverData.data.data.blocks;
@@ -72,6 +88,8 @@ export default {
             img: ui.image.imageUrl,
             // 标志信息(例如：超过72%人播放)，有些歌曲没有标志信息
             flag: ui.subTitle ? ui.subTitle.title : "",
+            // 标志信息类型
+            flagType: ui.subTitle ? ui.subTitle.titleType : "",
             // 歌手名，艺术家名
             artist: item.resourceExtInfo.artists.map((artist) => artist.name),
           };
@@ -109,5 +127,29 @@ export default {
   margin-top: 5px;
   font-size: 12px;
   color: #c6c7c6;
+}
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* 弹性伸缩盒子模型显示 */
+  display: -webkit-box;
+  /* 限制在一块元素显示的文本的行数 */
+  -webkit-line-clamp: 2;
+  /* 设置或检索伸缩盒对象的子元素的排列方式 */
+  -webkit-box-orient: vertical;
+}
+.artist-name {
+  margin-left: 5px;
+  font-size: 12px;
+  color: #969795;
+}
+.content .info .flag-tab {
+  width: 80px;
+  padding: 3px 0;
+  border-radius: 10px;
+  background: #fff9e5;
+  font-size: 10px;
+  color: #e9a200;
+  text-align: center;
 }
 </style>

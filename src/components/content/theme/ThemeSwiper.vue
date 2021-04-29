@@ -54,7 +54,7 @@ export default {
     playCount() {
       // 通过计算属性计算歌单播放量
       return function (playCount) {
-        if (playCount >= 1.0e4) {
+        if (playCount >= 1 && playCount < 1.0e8) {
           return (playCount * 1.0e-4).toFixed(0) + "万";
         } else if (playCount >= 1.0e8) {
           return (playCount * 1.0e-8).toFixed(1) + "亿";

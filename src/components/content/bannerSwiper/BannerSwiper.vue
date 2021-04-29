@@ -72,7 +72,7 @@ img {
 }
 .swiper-container {
   width: 95%;
-  margin: 20px auto;
+  margin: 10px auto;
   border-radius: 15px;
 }
 </style>
