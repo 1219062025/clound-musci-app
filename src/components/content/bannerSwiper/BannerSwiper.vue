@@ -8,7 +8,10 @@
       v-for="(item, index) in banner"
       :key="index"
     >
-      <img :src="item.pic">
+      <img
+        :src="item.pic"
+        @load="imgLoad"
+      >
       <span
         class="flag"
         :style="{background: item.titleColor}"
@@ -27,6 +30,7 @@ export default {
   name: "BannerSwiper",
   data() {
     return {
+      // 轮播图选项
       swiperOption: {
         loop: true,
         observer: true,
@@ -42,6 +46,7 @@ export default {
           bulletActiveClass: "discover-bullet-active",
         },
       },
+      isLoad: false,
     };
   },
   components: {
@@ -51,6 +56,14 @@ export default {
   props: {
     banner: {
       type: Array,
+    },
+  },
+  methods: {
+    imgLoad() {
+      if (!this.isLoad) {
+        this.$bus.$emit("imgLoad");
+        this.isLoad = true;
+      }
     },
   },
 };
@@ -72,7 +85,6 @@ img {
 }
 .swiper-container {
   width: 95%;
-  margin: 10px auto;
   border-radius: 15px;
 }
 </style>

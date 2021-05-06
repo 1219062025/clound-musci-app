@@ -2,7 +2,8 @@
   <div id="top-nav-bar">
     <nav-bar back-color="#edf7f9">
       <template #left>
-        <p class="icon"></p>
+        <slot name="left">
+        </slot>
       </template>
       <template #center>
         <el-input
@@ -11,12 +12,16 @@
           :placeholder="defaultKey"
         >
           <template #suffix>
-            <p class="icon"></p>
+            <p
+              class="icon"
+              @click="search"
+            ></p>
           </template>
         </el-input>
       </template>
       <template #right>
-        <p class="icon"></p>
+        <slot name="right">
+        </slot>
       </template>
     </nav-bar>
   </div>
@@ -27,7 +32,7 @@
 import NavBar from "components/common/navBar/NavBar";
 
 // 网络请求
-import { getDefaultKey, getSearchData } from "network/discover";
+import { getDefaultKey } from "network/discover";
 export default {
   name: "TopNavBar",
   data() {
@@ -35,14 +40,26 @@ export default {
       input: "",
       // 默认热搜关键词
       defaultKey: "",
-      // 轮播图数据
     };
   },
   components: {
     NavBar,
   },
+  methods: {
+    search() {
+      const query = {
+        queryString: "",
+      };
+      this.input
+        ? (query.queryString = this.input)
+        : (query.queryString = this.defaultKey);
+      this.$router.push({
+        path: "/search",
+        query,
+      });
+    },
+  },
   mounted() {
-    getSearchData("周杰伦").then((val) => {});
     getDefaultKey().then(
       (key) => (this.defaultKey = key.data.data.showKeyword)
     );
@@ -52,8 +69,11 @@ export default {
 
 <style scoped>
 #top-nav-bar {
+  position: relative;
+  z-index: 1;
   display: flex;
   padding: 10px 0;
+  background: #edf7f9;
 }
 .icon {
   font-size: 24px;

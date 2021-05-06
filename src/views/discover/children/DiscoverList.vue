@@ -8,7 +8,10 @@
         v-for="(item, index) in ballData"
         :key="index"
       >
-        <img :src="item.iconUrl">
+        <img
+          :src="item.iconUrl"
+          @load="imgLoad"
+        >
         <p class="name">{{item.name}}</p>
       </swiper-slide>
     </swiper>
@@ -23,6 +26,7 @@ export default {
   name: "DiscoverList",
   data() {
     return {
+      isLoad: false,
       swiperOption: {
         freeMode: true,
         slidesPerView: "auto",
@@ -44,12 +48,20 @@ export default {
       },
     },
   },
+  methods: {
+    imgLoad() {
+      if (!this.isLoad) {
+        this.$bus.$emit("imgLoad");
+        this.isLoad = true;
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
 #discove-list {
-  padding-bottom: 10px;
+  padding: 10px 0;
 }
 .swiper-slide {
   position: relative;

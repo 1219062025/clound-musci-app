@@ -5,15 +5,7 @@ export function getDiscover() {
     url: '/homepage/block/page'
   })
 }
-export function getSearchData(keywords) {
-  // keywords: 关键字
-  return request({
-    url: '/search/suggest',
-    params: {
-      keywords
-    },
-  })
-}
+
 // 获取搜索栏建议搜索关键字
 export function getDefaultKey() {
   return request({

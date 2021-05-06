@@ -17,7 +17,10 @@
           :key="indey"
           class="content"
         >
-          <img :src="item2.img">
+          <img
+            :src="item2.img"
+            @load="imgLoad"
+          >
           <div class="info">
             <div class="title">
               <span>{{item2.name}}</span>
@@ -32,7 +35,6 @@
               <span v-if="item2.flagType === 'songRcmdFromComment'" class="comment">SQ</span>
             </div> -->
           </div>
-
         </div>
       </swiper-slide>
     </swiper>
@@ -50,6 +52,7 @@ export default {
   name: "RandomSongs",
   data() {
     return {
+      isLoad: false,
       songListTitle: "",
       songList: [],
       swiperOption: {},
@@ -63,6 +66,14 @@ export default {
   computed: {
     artistName() {
       return (names) => names.join("/");
+    },
+  },
+  methods: {
+    imgLoad() {
+      if (!this.isLoad) {
+        this.$bus.$emit("imgLoad");
+        this.isLoad = true;
+      }
     },
   },
   mounted() {

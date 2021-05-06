@@ -10,6 +10,7 @@
       <img
         :src="item.pic"
         :style="{width: width}"
+        @load="imgLoad"
       >
       <span class="play-count icon"> {{playCount(item.playCount)}}</span>
       <p class="name">{{item.name}}</p>
@@ -22,6 +23,11 @@ import { swiper, swiperSlide } from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css";
 export default {
   name: "ThemeSwiper",
+  data() {
+    return {
+      isLoad: false,
+    };
+  },
   components: {
     swiper,
     swiperSlide,
@@ -60,6 +66,14 @@ export default {
           return (playCount * 1.0e-8).toFixed(1) + "亿";
         }
       };
+    },
+  },
+  methods: {
+    imgLoad() {
+      if (!this.isLoad) {
+        this.$bus.$emit("imgLoad");
+        this.isLoad = true;
+      }
     },
   },
 };

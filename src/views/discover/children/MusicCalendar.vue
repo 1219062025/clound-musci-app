@@ -31,7 +31,10 @@
         ></el-button>
         <p>{{item.count}}</p>
       </div>
-      <img :src="item.pic">
+      <img
+        :src="item.pic"
+        @load="imgLoad"
+      >
     </div>
   </div>
 </template>
@@ -51,6 +54,11 @@ export default {
   },
   components: {
     ThemeTitle,
+  },
+  methods: {
+    imgLoad() {
+      this.$bus.$emit("imgLoad");
+    },
   },
   mounted() {
     getDiscover().then((discoverData) => {

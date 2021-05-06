@@ -10,6 +10,8 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 // Vue.use(Element, { size: 'small', zIndex: 3000 });
 
+Vue.prototype.$bus = new Vue()
+
 new Vue({
   router,
   store,
