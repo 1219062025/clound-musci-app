@@ -10,3 +10,12 @@ export function getSearchData(keywords, offset) {
     },
   })
 }
+export function getSingleUrl(id) {
+  // id: 单曲id
+  return request({
+    url: '/song/url',
+    params: {
+      id
+    },
+  })
+}

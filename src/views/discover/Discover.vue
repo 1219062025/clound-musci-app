@@ -105,6 +105,6 @@ export default {
   height: 100vh;
 }
 .scroll {
-  height: calc(100% - 70px);
+  height: calc(100% - 119px);
 }
 </style>

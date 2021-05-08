@@ -7,6 +7,7 @@ import mutations from "./mutations"
 import getters from "./getters"
 
 let state = {
+  audio: {}
 }
 export default new Vuex.Store({
   state,

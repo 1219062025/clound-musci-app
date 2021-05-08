@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?biwvrm');
-  src:  url('fonts/icomoon.eot?biwvrm#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?biwvrm') format('truetype'),
-    url('fonts/icomoon.woff?biwvrm') format('woff'),
-    url('fonts/icomoon.svg?biwvrm#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?yvjx4t');
+  src:  url('fonts/icomoon.eot?yvjx4t#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?yvjx4t') format('truetype'),
+    url('fonts/icomoon.woff?yvjx4t') format('woff'),
+    url('fonts/icomoon.svg?yvjx4t#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -30,6 +30,9 @@
 }
 .icon-music1:before {
   content: "\f001";
+}
+.icon-search1:before {
+  content: "\f002";
 }
 .icon-star:before {
   content: "\f005";
@@ -82,6 +85,9 @@
 .icon-indent:before {
   content: "\f03c";
 }
+.icon-video-camera:before {
+  content: "\f03d";
+}
 .icon-step-backward:before {
   content: "\f048";
 }
@@ -105,6 +111,9 @@
 }
 .icon-fast-forward:before {
   content: "\f050";
+}
+.icon-step-forward:before {
+  content: "\f051";
 }
 .icon-chevron-left:before {
   content: "\f053";
@@ -154,6 +163,9 @@
 .icon-comment:before {
   content: "\f075";
 }
+.icon-retweet:before {
+  content: "\f079";
+}
 .icon-shopping-cart:before {
   content: "\f07a";
 }
@@ -165,6 +177,39 @@
 }
 .icon-arrows-v:before {
   content: "\f07d";
+}
+.icon-external-link:before {
+  content: "\f08e";
+}
+.icon-caret-down:before {
+  content: "\f0d7";
+}
+.icon-caret-up:before {
+  content: "\f0d8";
+}
+.icon-caret-left:before {
+  content: "\f0d9";
+}
+.icon-caret-right:before {
+  content: "\f0da";
+}
+.icon-sort:before {
+  content: "\f0dc";
+}
+.icon-unsorted:before {
+  content: "\f0dc";
+}
+.icon-sort-desc:before {
+  content: "\f0dd";
+}
+.icon-sort-down:before {
+  content: "\f0dd";
+}
+.icon-sort-asc:before {
+  content: "\f0de";
+}
+.icon-sort-up:before {
+  content: "\f0de";
 }
 .icon-angle-double-left:before {
   content: "\f100";
@@ -196,6 +241,12 @@
 .icon-reply:before {
   content: "\f112";
 }
+.icon-ellipsis-h:before {
+  content: "\f141";
+}
+.icon-ellipsis-v:before {
+  content: "\f142";
+}
 .icon-qq:before {
   content: "\f1d6";
 }
@@ -204,6 +255,12 @@
 }
 .icon-weixin:before {
   content: "\f1d7";
+}
+.icon-toggle-off:before {
+  content: "\f204";
+}
+.icon-toggle-on:before {
+  content: "\f205";
 }
 .icon-menu:before {
   content: "\e9bd";
@@ -215,7 +272,7 @@
   content: "\ea44";
 }
 .icon-home:before {
-  content: "\e902";
+  content: "\e903";
 }
 .icon-music:before {
   content: "\e911";
@@ -232,9 +289,84 @@
 .icon-arrow-down2:before {
   content: "\ea3e";
 }
+.icon-tencentqq:before {
+  content: "\e902";
+  color: #eb1923;
+}
+.icon-wechat:before {
+  content: "\e901";
+  color: #7bb32e;
+}
+.icon-zhihu:before {
+  content: "\e905";
+  color: #0084ff;
+}
+.icon-artist:before {
+  content: "\e906";
+}
 .icon-cheveron-down:before {
   content: "\e900";
 }
+.icon-dots-horizontal-double:before {
+  content: "\e907";
+}
+.icon-dots-horizontal-triple:before {
+  content: "\e908";
+}
+.icon-fast-forward1:before {
+  content: "\e909";
+}
+.icon-fast-rewind:before {
+  content: "\e90a";
+}
+.icon-forward1:before {
+  content: "\e90b";
+}
+.icon-forward-step:before {
+  content: "\e90c";
+}
+.icon-heart:before {
+  content: "\e90d";
+}
+.icon-music-playlist:before {
+  content: "\e90e";
+}
+.icon-pause1:before {
+  content: "\e90f";
+}
+.icon-pause-outline:before {
+  content: "\e910";
+}
+.icon-play1:before {
+  content: "\e912";
+}
+.icon-play-outline:before {
+  content: "\e913";
+}
+.icon-shuffle:before {
+  content: "\e914";
+}
+.icon-step-backward1:before {
+  content: "\e915";
+}
+.icon-step-forward1:before {
+  content: "\e916";
+}
 .icon-user-group:before {
-  content: "\e901";
+  content: "\e904";
+}
+.icon-volume-down1:before {
+  content: "\e917";
+}
+.icon-volume-mute:before {
+  content: "\e918";
+}
+.icon-volume-off1:before {
+  content: "\e919";
+}
+.icon-volume-up1:before {
+  content: "\e91a";
+}
+.icon-heart1:before {
+  content: "\e04a";
 }
