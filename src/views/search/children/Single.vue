@@ -58,17 +58,21 @@
 <script>
 import Scroll from "components/common/scroll/Scroll";
 
-import { getSearchData, getSingleUrl } from "network/search";
+import { getSearchData, getSingle, getLyric } from "network/search";
 
 import { PLAY } from "@/store/mutations-types";
 export default {
   name: "Single",
   data() {
     return {
+      // 获取到的所有歌曲
       songs: [],
-      offset: 0,
+      // 获取歌曲数据函数
       loadData: () => {},
-      isSingle: {},
+      // 获取到的歌曲数据页偏移量，一页最多有30首歌曲数据
+      offset: 0,
+      // 当前播放中的歌曲
+      activeSingle: {},
     };
   },
   components: {
@@ -80,15 +84,33 @@ export default {
       this.$refs.myScroll.finishPullUp();
     },
     play(single) {
-      if (this.isSingle !== single) {
-        this.isSingle = single;
-        getSingleUrl(single.id).then((result) => {
-          this.$store.commit({
-            type: PLAY,
-            url: result.data.data[0].url,
-            single,
+      // 如果点击的歌曲不是当前播放的就继续执行代码
+      if (this.activeSingle !== single) {
+        this.activeSingle = single;
+        let olyric = "",
+          tlyric = "";
+        getLyric(single.id).then((result) => {
+          // 获取歌词原文
+          olyric = result.data.hasOwnProperty("lrc")
+            ? result.data.lrc.lyric
+            : "";
+          tlyric =
+            result.data.hasOwnProperty("tlyric") &&
+            result.data.tlyric.lyric.length > 10
+              ? result.data.tlyric.lyric
+              : "";
+          // 获取歌曲相关信息
+          getSingle(single.id).then((result) => {
+            this.$store.commit({
+              type: PLAY,
+              url: result.data.data[0].url,
+              single,
+              lyric: {
+                olyric,
+                tlyric,
+              },
+            });
           });
-          this.$bus.$emit("play");
         });
       }
     },
@@ -108,7 +130,7 @@ export default {
               album: song.al,
               // 歌手名
               artists: song.ar.map((artist) => artist.name).join("/"),
-              // 歌曲时长
+              // 歌曲时长/ms
               duration: song.dt,
               // 歌曲图片
               pic: song.al.picUrl,
@@ -124,8 +146,6 @@ export default {
               vip: song.privilege.fee,
               // 是否有MV
               mv: song.mv,
-              // 歌曲持续时间
-              dt: song.dt,
             };
           })
         );

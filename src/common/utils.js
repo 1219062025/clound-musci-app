@@ -1,5 +1,6 @@
 // 防抖函数
 export function debounce(func, delay = 200) {
+  console.log(delay)
   let timer;
   return function () {
     if (timer) clearTimeout(timer);
@@ -7,4 +8,17 @@ export function debounce(func, delay = 200) {
       func(...arguments);
     }, delay);
   };
+}
+export function throttle(func, delay) {
+  let preTime = 0;
+  return function () {
+    let curTime = Date.now();
+    // let context = this;
+    // let args = arguments;
+    if (curTime - preTime > delay) {
+      // func.apply(context, args);
+      func();
+      preTime = curTime;
+    }
+  }
 }

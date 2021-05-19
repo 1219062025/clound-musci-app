@@ -1,9 +1,12 @@
 <template>
   <div id="control">
+    <!-- 音频标签 -->
     <audio
       :src="audio.audioUrl"
       ref="audio"
+      loop="true"
     ></audio>
+    <!-- 播放栏歌曲描述 -->
     <div
       class="info"
       @click="popup"
@@ -11,7 +14,7 @@
       <img
         class="pic"
         :src="audio.pic"
-        :class="{route: isplayed, pause: !isplayed}"
+        :class="{route: $store.state.isPlayed, pause: !$store.state.isPlayed}"
       >
       <div class="single">{{audio.name}}
         <span
@@ -21,7 +24,7 @@
         <span class="name"> - {{audio.artists}}</span>
       </div>
     </div>
-
+    <!-- 播放栏控制按钮与列表 -->
     <div class="btn">
       <span
         class="indicator"
@@ -29,6 +32,7 @@
       >
         <span
           class="icon play"
+          :class="{begin: !audio.name}"
           ref="play"
         ></span>
         <el-progress
@@ -41,30 +45,58 @@
           :percentage="percentage"
         ></el-progress>
       </span>
-      <span
-        class="icon list"
-        @click="cls"
-      ></span>
+      <span class="icon list"></span>
     </div>
+    <!-- 弹出播放详情控制 -->
+    <el-drawer
+      :visible.sync="drawer"
+      :with-header="false"
+      :modal="false"
+      size="100vh"
+      direction="btt"
+    >
+      <control-panel
+        @change="change"
+        @playSwitch="playSwitch"
+        @close="drawer = false"
+        :is-played="$store.state.isPlayed"
+      ></control-panel>
+    </el-drawer>
   </div>
 </template>
 
 <script>
+import ControlPanel from "components/content/playControl/children/ControlPanel";
+
 export default {
   name: "PlayControl",
   data() {
     return {
+      // 保存歌曲所有相关信息的对象，注意不是HTML结构中的音频标签对象
       audio: {},
-      isplayed: false,
-      icon: "",
+      // 弹出播放详情控制的开关
+      drawer: false,
       // 音频总时长
       duration: 0,
       // 音频已播放时长
       currentTime: 0,
     };
   },
+  components: {
+    ControlPanel,
+  },
   methods: {
-    // 播放/暂停
+    popup() {
+      this.audio.audioUrl
+        ? (this.drawer = true)
+        : this.$msgbox({
+            message: "请先点播歌曲",
+            showConfirmButton: false,
+            center: true,
+            customClass: "message-box",
+          });
+    },
+    // 切换播放/暂停
     playSwitch() {
       if (this.$refs.audio.currentSrc && this.$refs.audio.paused) {
         this.$refs.audio.play();
@@ -73,10 +105,12 @@ export default {
         this.$refs.audio.pause();
         this.$refs.play.innerText = "";
       }
+      this.$store.state.isPlayed = !this.$store.state.isPlayed;
     },
-    cls() {},
-    popup() {
-      this.$emit("popup");
+    // 播放位置改变
+    change(newTime) {
+      this.$refs.audio.currentTime = newTime;
+      this.$store.state.breakpoint = 0;
     },
   },
   computed: {
@@ -85,26 +119,27 @@ export default {
       return Math.round((this.currentTime / this.duration) * 100);
     },
   },
-  created() {
-    this.audio = this.$store.state.audio;
+  watch: {
+    "$store.state.audio"(val) {
+      this.audio = val;
+    },
   },
   mounted() {
-    this.$bus.$on("play", () => {
-      setTimeout(() => {
-        console.log(this.$refs.audio.currentSrc);
-        this.$refs.audio.play();
-        this.$refs.play.innerText = "";
-      }, 500);
-    });
     // 侦听音频事件
     const audio = this.$refs.audio;
     // 音频播放
-    audio.addEventListener("play", () => {
-      this.isplayed = true;
+    audio.addEventListener("canplay", () => {
+      this.$refs.audio.play();
+      this.$refs.play.innerText = "";
+      this.$store.state.isPlayed = true;
     });
-    // 音频暂停
+    // // 音频暂停
     audio.addEventListener("pause", () => {
-      this.isplayed = false;
+      this.$store.state.isPlayed = false;
+    });
+    // 音频结束
+    audio.addEventListener("ended", () => {
+      this.$store.state.isPlayed = false;
     });
     // 音频总时长变动
     audio.addEventListener("durationchange", () => {
@@ -112,15 +147,26 @@ export default {
     });
     // 音频已播放时间变动
     audio.addEventListener("timeupdate", () => {
-      this.currentTime = this.$refs.audio.currentTime;
-    });
-    audio.addEventListener("ended", () => {
-      this.isplayed = false;
+      this.$store.state.audio.currentTime = this.currentTime = this.$refs.audio.currentTime;
     });
   },
 };
 </script>
 
+<style>
+body .message-box {
+  width: 140px;
+  padding: 0;
+  border: 0;
+  background-color: rgba(66, 64, 64, 0.5);
+}
+body .message-box p {
+  color: #fff;
+}
+body .v-modal {
+  background: none;
+}
+</style>
 <style scoped>
 #control {
   display: flex;
@@ -130,7 +176,8 @@ export default {
   width: 100%;
   height: 49px;
   padding: 0 15px;
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid #6e6e6e;
+  background: #edf7f9;
   justify-content: space-between;
   align-items: center;
 }
@@ -142,16 +189,11 @@ export default {
   border-radius: 50%;
   margin-right: 10px;
 }
-.route {
-  animation: played 18s linear infinite;
-}
-.pause {
-  animation: played 18s linear infinite paused;
-}
 .info {
   display: flex;
   align-items: center;
 }
+
 .single,
 .tns {
   font-size: 14px;
@@ -185,12 +227,13 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-@keyframes played {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.begin {
+  width: 27px;
+  height: 27px;
+  line-height: 25px;
+  border: 1px solid #dde1e9;
+  border-radius: 50%;
+  text-align: center;
+  transform: translate(-100%, -50%);
 }
 </style>

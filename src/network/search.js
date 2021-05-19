@@ -10,10 +10,19 @@ export function getSearchData(keywords, offset) {
     },
   })
 }
-export function getSingleUrl(id) {
-  // id: 单曲id
+export function getSingle(id) {
+  // id: 歌曲的id
   return request({
     url: '/song/url',
+    params: {
+      id
+    },
+  })
+}
+export function getLyric(id) {
+  // id: 歌曲的id
+  return request({
+    url: '/lyric',
     params: {
       id
     },
