@@ -4,12 +4,12 @@
     <audio
       :src="audio.audioUrl"
       ref="audio"
-      loop="true"
+      :loop="loop"
     ></audio>
     <!-- 播放栏歌曲描述 -->
     <div
       class="info"
-      @click="popup"
+      @click="popupPlay"
     >
       <img
         class="pic"
@@ -45,11 +45,14 @@
           :percentage="percentage"
         ></el-progress>
       </span>
-      <span class="icon list"></span>
+      <span
+        class="icon list"
+        @click="popupList"
+      ></span>
     </div>
     <!-- 弹出播放详情控制 -->
     <el-drawer
-      :visible.sync="drawer"
+      :visible.sync="drawer_play"
       :with-header="false"
       :modal="false"
       size="100vh"
@@ -58,24 +61,37 @@
       <control-panel
         @change="change"
         @playSwitch="playSwitch"
-        @close="drawer = false"
-        :is-played="$store.state.isPlayed"
+        @close="drawer_play = false"
       ></control-panel>
+    </el-drawer>
+    <el-drawer
+      :visible.sync="drawer_list"
+      :modal="false"
+      :with-header="false"
+      custom-class="drawer-class"
+      direction="btt"
+      size="75vh"
+    >
+      <play-list :opened="drawer_list"></play-list>
     </el-drawer>
   </div>
 </template>
 
 <script>
 import ControlPanel from "components/content/playControl/children/ControlPanel";
+import PlayList from "components/content/playControl/children/PlayList";
 
 export default {
   name: "PlayControl",
   data() {
     return {
+      loop: false,
       // 保存歌曲所有相关信息的对象，注意不是HTML结构中的音频标签对象
       audio: {},
       // 弹出播放详情控制的开关
-      drawer: false,
+      drawer_play: false,
+      // 弹出播放列表的开关
+      drawer_list: false,
       // 音频总时长
       duration: 0,
       // 音频已播放时长
@@ -84,17 +100,21 @@ export default {
   },
   components: {
     ControlPanel,
+    PlayList,
   },
   methods: {
-    popup() {
+    popupPlay() {
       this.audio.audioUrl
-        ? (this.drawer = true)
+        ? (this.drawer_play = true)
         : this.$msgbox({
             message: "请先点播歌曲",
             showConfirmButton: false,
             center: true,
             customClass: "message-box",
           });
+    },
+    popupList() {
+      this.drawer_list = true;
     },
     // 切换播放/暂停
     playSwitch() {
@@ -139,7 +159,30 @@ export default {
     });
     // 音频结束
     audio.addEventListener("ended", () => {
+      const list = this.$store.state.playList;
+      const mode = this.$store.state.playMode;
       this.$store.state.isPlayed = false;
+      if (mode === 1) {
+        this.$store.state.audio.currentTime = 0;
+      } else if (list.length > 1) {
+        for (let i = 0; i < list.length; i++) {
+          if (this.$store.state.audio.id === list[i].id) {
+            switch (mode) {
+              case 0: {
+                this.$store.state.audio = list[(i + 1) % list.length];
+                break;
+              }
+              case 2: {
+                this.$store.state.audio =
+                  list[Math.floor(Math.random() * list.length - 1)];
+                break;
+              }
+            }
+            return;
+          }
+        }
+      }
+      this.$refs.audio.play();
     });
     // 音频总时长变动
     audio.addEventListener("durationchange", () => {
@@ -154,6 +197,14 @@ export default {
 </script>
 
 <style>
+body .drawer-class {
+  position: absolute;
+  width: 93% !important;
+  margin: 0 auto;
+  margin-bottom: 3%;
+  border-radius: 30px;
+  background: #fff;
+}
 body .message-box {
   width: 140px;
   padding: 0;
@@ -163,9 +214,9 @@ body .message-box {
 body .message-box p {
   color: #fff;
 }
-body .v-modal {
-  background: none;
-}
+/* body .v-modal {
+  z-index: 1000 !important;
+} */
 </style>
 <style scoped>
 #control {

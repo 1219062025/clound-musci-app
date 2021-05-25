@@ -3,6 +3,7 @@
     <scroll
       class="scroll"
       ref="myScroll"
+      @click.native="col"
     >
       <div
         v-if="!lyric.olyric"
@@ -12,7 +13,6 @@
         <p style="padding-bottom: 5px;">纯音乐，请欣赏</p>
         <p><span style="text-decoration: underline;">开启动效</span> 沉浸享受</p>
       </div>
-
       <ul>
         <li
           v-for="(item, index) in timeSign"
@@ -32,6 +32,7 @@ export default {
     return {
       timeSign: [],
       lyricIndex: 0,
+      touch: false,
     };
   },
   components: {
@@ -45,10 +46,43 @@ export default {
       },
     },
   },
+  methods: {
+    col() {
+      this.$emit("cutLyric");
+    },
+  },
   mounted() {
-    this.$on("refresh", () => {
-      this.$nextTick(() => {
-        this.$refs.myScroll.refresh();
+    this.$nextTick(() => {
+      this.$on("refresh", () => {
+        this.$nextTick(() => {
+          this.$refs.myScroll.refresh();
+          this.$refs.myScroll.scrollTo(
+            0,
+            -this.$store.state.breakpoint * 38,
+            0
+          );
+          this.$refs.myScroll.scroll.stop();
+        });
+      });
+      this.$refs.myScroll.scroll.on("scrollCancel", () => {
+        this.$emit("cutLyric");
+      });
+
+      let timer;
+      this.$refs.myScroll.scroll.on("beforeScrollStart", () => {
+        this.touch = true;
+        if (timer) clearTimeout(timer);
+      });
+
+      this.$refs.myScroll.scroll.on("touchEnd", () => {
+        timer = setTimeout(() => {
+          this.touch = false;
+          this.$refs.myScroll.scrollTo(
+            0,
+            -this.$store.state.breakpoint * 38,
+            2000
+          );
+        }, 3000);
       });
     });
   },
@@ -146,6 +180,8 @@ export default {
       deep: true,
     },
     "$store.state.audio.currentTime"(val) {
+      // if (!this.touch) this.$refs.myScroll.scroll.stop();
+
       if (val === 0) this.$store.state.breakpoint = 0;
       if (val <= this.timeSign[0].beginTime) {
         // :class="{route: !isLyric, pause: isLyric}"
@@ -158,14 +194,16 @@ export default {
           i < this.timeSign.length - 1;
           i++
         ) {
-          console.log("change");
+          // console.log(this.$refs.myScroll.scroll.pending);
           if (
             val >= this.timeSign[i].beginTime &&
             val <= this.timeSign[i + 1].beginTime
           ) {
             this.lyricIndex = i;
             this.$store.state.breakpoint = i;
-            this.$refs.myScroll.scrollTo(0, -i * 38, 2000);
+            if (!this.touch && !this.$refs.myScroll.scroll.pending) {
+              this.$refs.myScroll.scrollTo(0, -i * 38, 2000);
+            }
             break;
           }
         }
@@ -189,9 +227,11 @@ export default {
   height: 100%;
 }
 ul {
+  position: relative;
+  transition: all 1s;
   padding: 50% 0;
 }
 li {
-  padding: 10px 0;
+  padding: 10px 40px;
 }
 </style>

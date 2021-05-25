@@ -30,18 +30,20 @@
         <lyric
           v-show="isLyric"
           :lyric="audio.lyric"
+          @cutLyric="cutLyric"
         ></lyric>
         <div
           class="wrap"
-          v-show="!isLyric"
+          :class="{lucency: isLyric}"
         ></div>
         <div
           class="img"
-          v-show="!isLyric"
+          :class="{lucency: isLyric}"
         >
           <img
             v-if="audio.pic"
             :src="audio.pic"
+            :class="{route: $store.state.isPlayed, pause: !$store.state.isPlayed}"
           >
         </div>
       </div>
@@ -78,24 +80,48 @@
         </div>
         <!-- 控制按钮 -->
         <div class="control">
-          <span class="iconfont icon-xunhuan"></span>
-          <span class="iconfont icon-shangyishoushangyige"></span>
           <span
             class="iconfont"
-            :class="{'icon-bofang': !isPlayed, 'icon-bofang1': isPlayed}"
+            :class="mode"
+            @click="modeChange"
+          ></span>
+          <span
+            class="iconfont icon-shangyishoushangyige"
+            @click="switchSong('prev')"
+          ></span>
+          <span
+            class="iconfont"
+            :class="{'icon-bofang': !$store.state.isPlayed, 'icon-bofang1': $store.state.isPlayed}"
             @click="$emit('playSwitch')"
           ></span>
-          <span class="iconfont icon-xiayigexiayishou"></span>
-          <span class="iconfont icon-bofangliebiao"></span>
+          <span
+            class="iconfont icon-xiayigexiayishou"
+            @click="switchSong('next')"
+          ></span>
+          <span
+            class="iconfont icon-bofangliebiao"
+            @click="drawer_list = true"
+          ></span>
         </div>
       </div>
+      <el-drawer
+        :visible.sync="drawer_list"
+        :modal="false"
+        :with-header="false"
+        custom-class="drawer-class"
+        direction="btt"
+        size="75vh"
+      >
+        <play-list :opened="drawer_list"></play-list>
+      </el-drawer>
     </div>
-
   </div>
 </template>
 
 <script>
 import Lyric from "./Lyric";
+import PlayList from "components/content/playControl/children/PlayList";
+
 export default {
   name: "ControlPanel",
   data() {
@@ -104,16 +130,12 @@ export default {
       newTime: 0,
       isChange: false,
       isLyric: false,
+      drawer_list: false,
     };
-  },
-  props: {
-    isPlayed: {
-      type: Boolean,
-      default: false,
-    },
   },
   components: {
     Lyric,
+    PlayList,
   },
   computed: {
     bodyImg() {
@@ -139,6 +161,16 @@ export default {
         }${second}`;
       };
     },
+    mode() {
+      switch (this.$store.state.playMode) {
+        case 0:
+          return { "icon-xunhuan": true };
+        case 1:
+          return { "icon-hanhan-01-01": true };
+        case 2:
+          return { "icon-xunhuanbofang": true };
+      }
+    },
   },
   methods: {
     close() {
@@ -157,9 +189,34 @@ export default {
       this.isChange = false;
     },
     cutLyric() {
-      console.log("11");
       this.isLyric = !this.isLyric;
       this.$children[0].$emit("refresh");
+    },
+    switchSong(str) {
+      const playList = this.$store.state.playList;
+      let prevSong = {};
+      let nextSong = {};
+      for (let i = 0; i < playList.length; i++) {
+        if (this.$store.state.audio.id === playList[i].id) {
+          prevSong = playList[i - 1 < 0 ? playList.length - 1 : i - 1];
+          nextSong = playList[(i + 1) % playList.length];
+        }
+      }
+      switch (str) {
+        case "prev": {
+          if (prevSong !== this.$store.state.audio)
+            this.$store.state.audio = prevSong;
+          break;
+        }
+        case "next": {
+          if (nextSong !== this.$store.state.audio)
+            this.$store.state.audio = nextSong;
+          break;
+        }
+      }
+    },
+    modeChange() {
+      this.$store.state.playMode = (this.$store.state.playMode + 1) % 3;
     },
   },
   watch: {
@@ -256,6 +313,9 @@ export default {
   height: 320px;
   border: 15px solid rgba(44, 38, 39, 0.2);
   border-radius: 50%;
+}
+.lucency {
+  opacity: 0;
 }
 .interaction {
   display: flex;

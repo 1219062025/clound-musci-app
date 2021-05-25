@@ -48,6 +48,9 @@ export default {
     getScrollY() {
       return this.scroll ? this.scroll.y : 0;
     },
+    beforeScrollStart(fn) {
+      this.scroll && this.scroll.on("beforeScrollStart", fn);
+    },
   },
   mounted() {
     this.$nextTick(() => {
