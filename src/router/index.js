@@ -19,7 +19,7 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: Search,
-    redirect: '/search/synthesize',
+    redirect: '/search/single',
     children: [
       {
         path: 'synthesize',

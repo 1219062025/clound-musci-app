@@ -190,7 +190,8 @@ export default {
     });
     // 音频已播放时间变动
     audio.addEventListener("timeupdate", () => {
-      this.$store.state.audio.currentTime = this.currentTime = this.$refs.audio.currentTime;
+      this.$store.state.audio.currentTime = this.currentTime =
+        this.$refs.audio.currentTime;
     });
   },
 };
@@ -222,6 +223,7 @@ body .message-box p {
 #control {
   display: flex;
   position: fixed;
+  box-sizing: border-box;
   bottom: 0;
   z-index: 1;
   width: 100%;
@@ -250,7 +252,7 @@ body .message-box p {
   font-size: 14px;
 }
 .single {
-  width: 19em;
+  width: 16em;
   /* 先强制一行内显示文本，默认值normal会自动换行 */
   white-space: nowrap;
   /* 超出的部分隐藏 */
@@ -264,7 +266,9 @@ body .message-box p {
 }
 .btn {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 64px;
 }
 .indicator {
   position: relative;
@@ -285,6 +289,6 @@ body .message-box p {
   border: 1px solid #dde1e9;
   border-radius: 50%;
   text-align: center;
-  transform: translate(-100%, -50%);
+  transform: translateY(-50%);
 }
 </style>

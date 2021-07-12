@@ -194,7 +194,6 @@ export default {
           i < this.timeSign.length - 1;
           i++
         ) {
-          // console.log(this.$refs.myScroll.scroll.pending);
           if (
             val >= this.timeSign[i].beginTime &&
             val <= this.timeSign[i + 1].beginTime

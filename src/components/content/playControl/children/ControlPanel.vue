@@ -46,6 +46,10 @@
             :class="{route: $store.state.isPlayed, pause: !$store.state.isPlayed}"
           >
         </div>
+        <div
+          v-if="audio.freeTrialInfo"
+          class="audition"
+        >正在试听中({{audio.freeTrialInfo.end}}s)，开通会员畅听无阻 >></div>
       </div>
       <!-- 播放控制区 -->
       <div class="instrument">
@@ -313,6 +317,18 @@ export default {
   height: 320px;
   border: 15px solid rgba(44, 38, 39, 0.2);
   border-radius: 50%;
+}
+.audition {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  padding: 10px;
+  transform: translateX(-50%);
+  font-size: 10px;
+  border-radius: 20px;
+  background: rgba(44, 38, 39, 0.2);
+  overflow: hidden;
+  white-space: nowrap;
 }
 .lucency {
   opacity: 0;

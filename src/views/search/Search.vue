@@ -32,7 +32,7 @@ export default {
   name: "Search",
   data() {
     return {
-      isActive: 0,
+      isActive: 1,
       query: {},
       swiperOption: {
         freeMode: true,
@@ -44,15 +44,15 @@ export default {
       tabList: [
         { name: "综合", link: "synthesize" },
         { name: "单曲", link: "single" },
-        { name: "歌单", link: "single" },
-        { name: "视频", link: "single" },
-        { name: "歌手", link: "single" },
-        { name: "播单", link: "single" },
-        { name: "歌词", link: "single" },
-        { name: "专辑", link: "single" },
-        { name: "声音", link: "single" },
-        { name: "云圈", link: "single" },
-        { name: "用户", link: "single" },
+        { name: "歌单", link: "synthesize" },
+        { name: "视频", link: "synthesize" },
+        { name: "歌手", link: "synthesize" },
+        { name: "播单", link: "synthesize" },
+        { name: "歌词", link: "synthesize" },
+        { name: "专辑", link: "synthesize" },
+        { name: "声音", link: "synthesize" },
+        { name: "云圈", link: "synthesize" },
+        { name: "用户", link: "synthesize" },
       ],
     };
   },

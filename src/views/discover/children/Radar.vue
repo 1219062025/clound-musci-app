@@ -33,7 +33,6 @@ export default {
   // });
   mounted() {
     getDiscover().then((discoverData) => {
-      console.log("111", discoverData);
       const dataMode = discoverData.data.data.blocks;
       this.radarTitle = dataMode[4].uiElement.subTitle.title;
       this.radarList = dataMode[4].creatives.map((creative) => {

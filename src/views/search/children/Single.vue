@@ -71,6 +71,8 @@ export default {
               type: PLAY,
               url: result.data.data[0].url,
               id: result.data.data[0].id,
+              // 歌曲是否未登录、非会员的用户只能试听
+              freeTrialInfo: result.data.data[0].freeTrialInfo,
               single,
               lyric: {
                 olyric,

@@ -17,6 +17,8 @@ export default {
       tns: payload.single.tns,
       // 额外描述
       alia: payload.single.alia,
+      // 歌曲是否未登录、非会员的用户只能试听
+      freeTrialInfo: payload.freeTrialInfo,
       // 歌曲总时长
       duration: Math.round(payload.single.duration / 1000),
       // 歌词
